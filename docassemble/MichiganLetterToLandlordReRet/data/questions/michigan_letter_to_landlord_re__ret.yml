@@ -51,6 +51,7 @@ code: |
 ---
 objects:
   - forwarding_address: ALAddress
+  - rental_address: ALAddress
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - users: ALPeopleList.using(there_are_any=True)
 ---
@@ -69,6 +70,7 @@ code: |
   user_ask_role = "plaintiff"
   users.gather()
   set_parts(subtitle=str(users))
+  rental_address.address
   forwarding_address.address
   set_progress(14)
   When_did_you_vacate_the_property
@@ -77,7 +79,6 @@ code: |
   set_progress(28)
   What_day_is_today
   How_much_was_the_deposit
-  What_is_the_rentals_address
   set_progress(42)
   users[0].phone_number
   other_parties.gather()
@@ -183,12 +184,12 @@ fields:
     min: 0
 continue button field: How_much_was_the_deposit
 ---
-id: What is the rental s address
-question: |
-  What is the rental's address?
-fields:
-  - "Rental address": rental_address
-continue button field: What_is_the_rentals_address
+#id: What is the rental s address
+#question: |
+#  What is the rental's address?
+#fields:
+#  - "Rental address": rental_address
+#continue button field: What_is_the_rentals_address
 ---
 id: preview michigan_letter_to_landlord_re__ret
 question: |
