@@ -50,6 +50,7 @@ code: |
   al_form_type = "letter" 
 ---
 objects:
+  - forwarding_address: ALAddress
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - users: ALPeopleList.using(there_are_any=True)
 ---
@@ -68,8 +69,7 @@ code: |
   user_ask_role = "plaintiff"
   users.gather()
   set_parts(subtitle=str(users))
-  What_is_your_name
-  What_is_the_forwarding_address_that_you_gave_to_your_landlord
+  forwarding_address.address
   set_progress(14)
   When_did_you_vacate_the_property
   When_did_you_notify_your_landlord_of_your_forwarding_address
@@ -126,19 +126,14 @@ subquestion: |
   
   Most people take about 15-20 minutes to finish this interview.
 ---
-id: What is your name
-question: |
-  What is your name?
-fields:
-  - "Name": user.name.first
-continue button field: What_is_your_name
 ---
-id: What is the forwarding address that you gave to your landlord
-question: |
-  What is the forwarding address that you gave to your landlord?
-fields:
-  - "Forwarding address": forwarding_address
-continue button field: What_is_the_forwarding_address_that_you_gave_to_your_landlord
+
+#id: What is the forwarding address that you gave to your landlord
+#question: |
+#  What is the forwarding address that you gave to your landlord?
+#fields:
+#  - "Forwarding address": forwarding_address
+#continue button field: What_is_the_forwarding_address_that_you_gave_to_your_landlord
 ---
 id: When did you vacate the property
 question: |
