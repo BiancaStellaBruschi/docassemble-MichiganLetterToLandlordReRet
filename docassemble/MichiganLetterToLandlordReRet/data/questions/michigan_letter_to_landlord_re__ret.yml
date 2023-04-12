@@ -68,6 +68,10 @@ code: |
   nav.set_section("review_michigan_letter_to_landlord_re__ret")
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
+  informational_2
+  yesno_forwarding_address
+  if yesno_forwarding_address == False :
+    user_not_eligible
   users.gather()
   set_parts(subtitle=str(users))
   rental_address.address
@@ -117,18 +121,74 @@ question: |
 subquestion: |
   This interview will help you write a Do-It-Yourself Letter to Landlord (Security Deposit).
   
-  Use this tool if you have not gotten your security deposit from your previous landlord and it’s been more than 30 days since you moved out of the home.
+  Use this tool if you have **not** gotten your **security deposit** from your previous landlord and it’s been more than **30 days** since you moved out of your old home.
   
-  This tool assumes you gave your previous landlord your forwarding address within four days of moving out of the home.
+  This tool assumes you gave your previous landlord your **forwarding address** within **four days** of moving out of the home.
   
-  If you did not give your landlord your forwarding address within four days, the timelines in this letter do not apply and you should not use this tool. If that is the case, please click the "Exit" button below to return to the Michigan Legal Help web site to learn more.
+  If you did **not** give your landlord your forwarding address within four days, the timelines in this letter do not apply and you should not use this tool. If that is the case, click [here](https://michiganlegalhelp.org/self-help-tools/housing/security-deposit-help-tenants) to return to the Michigan Legal Help web site to learn more.
   
-  Otherwise, please click the Continue button below.
-  
-  Most people take about 15-20 minutes to finish this interview.
+  Otherwise, please click the 'Next' button below.
 ---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: DIY_tool_for_writing_a_Letter_to_Landlord_Security_Deposit
+continue button field: informational_2
+question: |
+  Getting ready
+subquestion: |
+  You will have to give your **contact information** (name, address, phone number etc.) and your landlord's. You should know in advance **how much** does the deposit amount to in dollars. 
+  
+  It should take you between **10 and 15 minutes** to finish answering all the questions. 
+  
+  Once you have answered all the questions, your **personalized letter** to your landlord requesting return of your security deposit will be ready to print and be signed by you (and anyone else who is adding their name to it). 
+  
+  If you make a mistake, you can always review your answers clicking the blue **'Review Your Answers'** button on the top left corner of the screen.
+  
 ---
 
+# event: informational_2
+#id: informational screen 2
+#question: |
+#  Getting ready
+#subquestion: |
+#  You will have to give your **contact information** (name, address, phone number etc.) and your landlord's. You should know in advance **how much** does the deposit amount to in dollars. 
+#  
+#  It should take you between **10 and 15 minutes** to finish answering all the questions. 
+#  
+#  Once you have answered all the questions, your **personalized letter** to your landlord requesting return of your security deposit will be ready to print and be signed by you (and anyone else who is adding their name to it). 
+#  
+#  If you make a mistake, you can always review your answers clicking the blue **'Review Your Answers'** button on the top left corner of the screen.
+#continue button field: yesno_forwarding_address
+---
+---
+id: any other users
+question: |
+  % if al_form_type in ['starts_case','existing_case','appeal']:
+  Is anyone else on your side of this case?
+  % else:
+  Is anyone else adding their name to this letter with you?
+  % endif
+subquestion: |
+  % if len(users.elements) > 1:  
+  So far you have told us about ${comma_and_list(users.complete_elements())}.
+  % endif
+fields:
+  - no label: users.there_is_another
+    datatype: yesnoradio
+---
+id: did you give forwarding address
+question: |
+  Did you give your landlord your **forwarding address** within **four days** of    moving out of your old home?
+fields: 
+  - "Forwarding Address": yesno_forwarding_address
+    datatype: yesnoradio
+---
+id: user not eligible 
+event: user_not_eligible
+question: You cannot use this letter to request the return of your security deposit. 
+subquestion: Please return to Michigan Legal Help and [visit the Security Deposit toolkit to learn more](https://michiganlegalhelp.org/self-help-tools/housing/security-deposit-help-tenants).
+---
+    
 #id: What is the forwarding address that you gave to your landlord
 #question: |
 #  What is the forwarding address that you gave to your landlord?
