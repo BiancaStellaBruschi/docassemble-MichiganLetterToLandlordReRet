@@ -144,9 +144,9 @@ question: |
 subquestion: |
   You need to have this information at hand to complete the interview: 
   
-  * Your **contact** information (new address, phone, e-mail etc.);
-  * If other people are signign this letter with you, you should have their **contact** information ready (name, address, phone);
-  * Your landlord's name and **contact** information (whether it is a person or a business);
+  * Your **contact** information (new address, phone number, e-mail etc.);
+  * If **other people** are signing this letter with you, you should have their **contact** information ready (name, address, phone number);
+  * Your **landlord**'s name and **contact** information (name, address, phone number);
   * The **rental** address you moved out from;
   * The **amount** of the deposit; 
 
@@ -195,6 +195,10 @@ fields:
 id: did you give forwarding address
 question: |
   Did you give your landlord your **forwarding address** within **four days** of    moving out of your old home?
+subquestion: |
+  
+    ${ collapse_template(forwarding_address_template) }
+    
 fields: 
   - "Forwarding Address": yesno_forwarding_address
     datatype: yesnoradio
@@ -209,7 +213,7 @@ template: forwarding_address_template
 subject: |
   What is my forwarding address?
 content: |
-  Within **four days** of moving out of your old home, you must give your landlord your new address in writing. If you don’t want to give your landlord your new address, you can provide a different forwarding address like a P.O. Box. If you do this, make sure you **regularly pick up** any mail sent to that address.
+  Within **four days** of moving out of your old home, you must give your landlord your **new address** in writing. If you don’t want to give your landlord your new address, you can provide a different forwarding address like a P.O. Box. If you do this, make sure you **regularly pick up** any mail sent to that address.
 ---
 id: user not eligible 
 event: user_not_eligible
@@ -235,7 +239,7 @@ sets:
 question: |
   What is your forwarding address?
 subquestion: |
-  Description here; (add the collapse_template)
+  Insert your forwarding address below, as given to your landlord.
   
   ${ collapse_template(forwarding_address_template) }
   
@@ -245,11 +249,11 @@ fields:
 ---
 id: When did you vacate the property
 question: |
-  When did you vacate the rental property?
+  When did you move out of the rental property?
 subquestion: |
-  Insert the date you vacated your old home manually, or choose it from the drop-down calendar by clicking on the calendar icon. 
+  Insert the date manually, or choose it from the drop-down calendar by clicking on the calendar icon. <i class="fa-regular fa-calendar"></i>
 fields:
-  - "Date of Vacation": vacation_date
+  - "Move-out date": vacation_date
     datatype: date
 continue button field: When_did_you_vacate_the_property
 ---
@@ -257,7 +261,7 @@ id: When did you notify your landlord of your forwarding address
 question: |
   When did you tell your landlord your forwarding address?
 subquestion: |
-  Insert the date you notified your landlord manually, or choose it from the drop-down calendar by clicking on the calendar icon. <i class="fa-regular fa-calendar"></i>
+  Insert the date manually, or choose it from the drop-down calendar by clicking on the calendar icon. <i class="fa-regular fa-calendar"></i>
 fields:
   - "Date of Notification": notification_date
     datatype: date
@@ -265,7 +269,7 @@ continue button field: When_did_you_notify_your_landlord_of_your_forwarding_addr
 ---
 id: How did you notify your landlord
 question: |
-  How did you notify your landlord.
+  How did you tell your landlord your forwarding address?
 subquestion: |
   Choose one of the options (hand-delivered, mailed or e-mailed).
 fields:
@@ -281,24 +285,14 @@ sets:
   - rental_address.state
   - rental_address.country
 question: |
-  What is your rental address?
+  What is the address of the rental property?
 subquestion: |
-  Place rental address description here.
+  Insert the address below.  
   
   
 fields:
   - code: |
       rental_address.address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)  
----
-id: What day is today
-question: |
-  What day is today?
-subquestion: |
-  Insert the date manually, or choose it from the drop-down calendar by clicking on the calendar icon. 
-fields:
-  - "Date of Current": current_date
-    datatype: date
-continue button field: What_day_is_today
 ---
 id: How much was the deposit
 question: |
@@ -308,6 +302,36 @@ fields:
     datatype: currency
     min: 0
 continue button field: How_much_was_the_deposit
+---
+sets:
+  - other_parties[i].name.first
+  - other_parties[i].name.last
+  - other_parties[i].name.middle
+  - other_parties[i].name.suffix
+id: type of landlord
+question: |
+  Is your landlord a person or a business?
+# ${ ordinal(i) } ?
+fields:
+  - code: |
+      other_parties[i].name_fields(person_or_business='unsure')
+---
+id: new address
+sets:
+  - users[0].address.address
+  - users[0].address.city
+  - users[0].address.zip
+  - users[0].address.unit
+  - users[0].address.state
+  - users[0].address.country
+question: |
+  What is your new address?
+subquestion: |
+  Your **new** address **can be the same as the forwarding address** you have given to your landlord. If you **did not give** your new address to your landlord as your forwarding one (for example you chose a **P.O. box** that you check often instead), **just insert your new address**. 
+# check with the people of Michigan Legal Help
+fields:
+  - code: |
+      users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
 ---
 #id: What is the rental s address
 question: |
@@ -360,10 +384,6 @@ review:
       % for item in other_parties:
         * ${ item }
       % endfor
-  - Edit: current_date
-    button: |
-      **Date of Current**:
-      ${ current_date }
   - Edit: deposit_amount
     button: |
       **Deposit amount**:
@@ -382,7 +402,7 @@ review:
       ${ rental_address }
   - Edit: vacation_date
     button: |
-      **Date of Vacation**:
+      **Move-out date**:
       ${ vacation_date }
   - Edit: notification_date
     button: |
