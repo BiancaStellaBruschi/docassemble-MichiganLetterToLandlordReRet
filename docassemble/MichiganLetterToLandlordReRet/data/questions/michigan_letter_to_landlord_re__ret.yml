@@ -76,7 +76,7 @@ code: |
   set_parts(subtitle=str(users))
   forwarding_address.address
   When_did_you_notify_your_landlord_of_your_forwarding_address
-  How_did_you_notify_your_landlord
+  type_of_delivery
   rental_address.address
   set_progress(14)
   When_did_you_vacate_the_property
@@ -85,7 +85,6 @@ code: |
   set_progress(42)
   users[0].phone_number
   other_parties.gather()
-  users[0].address.address
   set_progress(56)
   other_parties[0].address.address
   other_parties[0].phone_number
@@ -267,6 +266,14 @@ fields:
     datatype: date
 continue button field: When_did_you_notify_your_landlord_of_your_forwarding_address
 ---
+id: phone number
+question: |
+  What is your phone number?
+subquestion: |
+  ${ collapse_template(why_contact_info_needed_template) }
+fields:  
+  - Phone number: users[0].phone_number
+---
 id: How did you notify your landlord
 question: |
   How did you tell your landlord your forwarding address?
@@ -274,7 +281,12 @@ subquestion: |
   Choose one of the options (hand-delivered, mailed or e-mailed).
 fields:
   - "Type of delivery": type_of_delivery
-continue button field: How_did_you_notify_your_landlord
+    input type: radio
+    choices:
+      - Hand-delivered: hand-delivered
+      - Mailed: mailed
+      - E-mailed: e-mailed
+
 ---
 id: rental address
 sets:
@@ -332,6 +344,23 @@ subquestion: |
 fields:
   - code: |
       users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+---
+sets:
+  - users[i].name.first
+  - users[i].name.last
+  - users[i].name.middle
+  - users[i].name.suffix    
+id: other users names
+question: |
+  % if al_form_type in ['starts_case','existing_case','appeal']:
+  Who is the ${ ordinal(i) } person on your side of the case?
+  % else:
+  What is the name of the ${ ordinal_number(i) } person who is adding their name to
+  this letter with you?
+  % endif
+fields:
+  - code: |
+      users[i].name_fields()
 ---
 #id: What is the rental s address
 question: |
