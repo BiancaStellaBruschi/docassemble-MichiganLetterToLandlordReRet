@@ -44,7 +44,7 @@ code: |
   github_repo_name =  'docassemble-MichiganLetterToLandlordReRet'
 ---
 code: |
-  interview_short_title = "Write a Do-It-Yourself Letter to Landlord (Security Deposit)"
+  interview_short_title = "DIY Letter to Landlord (Security Deposit)"
 ---
 code: |
   al_form_type = "letter" 
@@ -115,17 +115,17 @@ comment: |
 id: DIY_tool_for_writing_a_Letter_to_Landlord_Security_Deposit
 continue button field: michigan_letter_to_landlord_re__ret_intro
 question: |
-  DIY tool for writing a Letter to Landlord (Security Deposit)
+  DIY Letter to Landlord (Security Deposit)
 subquestion: |
   This interview will help you write a personalized letter to your landlord requesting **return of your security deposit**.
   
   Use this tool if you:
   
+  * you gave your previous landlord your **forwarding address** within **four days** of moving out of the home and;
+  
   * have **not** gotten your **security deposit** from your previous landlord and;
   
   * it’s been more than **30 days** since you moved out of your old home.
-  
-  This tool assumes you gave your previous landlord your **forwarding address** within **four days** of moving out of the home.
 
   ${ collapse_template(forwarding_address_template) }
   
@@ -143,15 +143,15 @@ question: |
 subquestion: |
   You need to have this information at hand to complete the interview: 
   
-  * Your **contact** information (new address, phone number, e-mail etc.);
-  * If **other people** are signing this letter with you, you should have their **contact** information ready (name, address, phone number);
+  * Your **contact** information (forwarding address, phone number, e-mail etc.);
+  * If **your roommates or co-tenants** are signing this letter with you, you should have their **contact** information ready (name, address, phone number);
   * Your **landlord**'s name and **contact** information (name, address, phone number);
   * The **rental** address you moved out from;
   * The **amount** of the deposit; 
 
   It should take you between **10 and 15 minutes** to finish answering all the questions. 
   
-  Once you have answered all the questions, your **personalized letter** will be ready to print and be signed by you (and anyone else who is adding their name to it). 
+  Once you have answered all the questions, your **personalized letter** will be ready to print and signed. 
   
   If you make a mistake or you want to review your answers, you can always review your answers clicking the blue **'Review your answers'** button on the top left corner of the screen.
   
@@ -181,11 +181,13 @@ question: |
   % endif
   
 subquestion: |
+  **If you are not the only one** trying to get your security deposit back, add the **names** of your old co-tenants who are interested in getting it back as well.
+  
   % if len(users.elements) > 1:  
   So far you have told us about ${comma_and_list(users.complete_elements())}.
   % endif
   
-   ${ collapse_template(other_signatories) }
+
 
 fields:
   - no label: users.there_is_another
@@ -201,12 +203,6 @@ subquestion: |
 fields: 
   - "Forwarding Address": yesno_forwarding_address
     datatype: yesnoradio
----
-template: other_signatories
-subject: |
-  What does this mean?
-content: |
-  If you are not the only one trying to get your security deposit back, add the **names** of your old co-tenants who are interested in getting it back as well.
 ---
 template: forwarding_address_template
 subject: |
@@ -236,7 +232,7 @@ sets:
   - forwarding_address.state
   - forwarding_address.country
 question: |
-  What is your forwarding address?
+  What is the forwarding address you gave to your landlord?
 subquestion: |
   Insert your forwarding address below, as given to your landlord.
   
@@ -297,7 +293,7 @@ sets:
   - rental_address.state
   - rental_address.country
 question: |
-  What is the address of the rental property?
+  What is the address of the rental property you moved out from?
 subquestion: |
   Insert the address below.  
   
@@ -328,22 +324,6 @@ fields:
   - code: |
       other_parties[i].name_fields(person_or_business='unsure')
 ---
-id: new address
-sets:
-  - users[0].address.address
-  - users[0].address.city
-  - users[0].address.zip
-  - users[0].address.unit
-  - users[0].address.state
-  - users[0].address.country
-question: |
-  What is your new address?
-subquestion: |
-  Your **new** address **can be the same as the forwarding address** you have given to your landlord. If you **did not give** your new address to your landlord as your forwarding one (for example you chose a **P.O. box** that you check often instead), **just insert your new address**. 
-# check with the people of Michigan Legal Help
-fields:
-  - code: |
-      users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
 ---
 sets:
   - users[i].name.first
@@ -449,16 +429,15 @@ subquestion: |
 table: users.table
 rows: users
 columns:
-  - Phone number: |
-      row_item.phone_number if defined("row_item.phone_number") else ""
   - Name: |
       row_item.name.full() if defined("row_item.name.first") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.address") else ""
+  - Phone number: |
+      row_item.phone_number if defined("row_item.phone_number") else ""
+      
+ 
 edit:
-  - phone_number
   - name.first
-  - address.address
+  - phone_number
 confirm: True
 
 ---
@@ -491,7 +470,7 @@ event: michigan_letter_to_landlord_re__ret_download
 question: |
   All done
 subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
+  Thank you ${users[0].name.full()}. Your form is ready to download and deliver.
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
 
