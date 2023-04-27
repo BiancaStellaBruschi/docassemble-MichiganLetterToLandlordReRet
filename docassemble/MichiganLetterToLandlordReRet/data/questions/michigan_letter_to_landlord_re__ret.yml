@@ -210,10 +210,24 @@ subject: |
 content: |
   Within **four days** of moving out of your old home, you must give your landlord your **new address** in writing. If you don’t want to give your landlord your new address, you can provide a different forwarding address like a P.O. Box. If you do this, make sure you **regularly pick up** any mail sent to that address.
 ---
+template: why_phone_info_needed_template
+subject: |
+  Why do I need to give my phone number?
+content: |
+  It is important that your landlord have another way of reaching out to you other than sending mail to your forwarding address. 
+---
 id: user not eligible 
 event: user_not_eligible
 question: You cannot use this letter to request the return of your security deposit. 
 subquestion: Please return to Michigan Legal Help and [visit the Security Deposit toolkit to learn more](https://michiganlegalhelp.org/self-help-tools/housing/security-deposit-help-tenants).
+---
+id: phone number
+question: |
+  What is your phone number?
+subquestion: |
+  ${ collapse_template(why_phone_info_needed_template) }
+fields:  
+  - Phone number: users[0].phone_number
 ---
     
 #id: What is the forwarding address that you gave to your landlord
@@ -262,13 +276,6 @@ fields:
     datatype: date
 continue button field: When_did_you_notify_your_landlord_of_your_forwarding_address
 ---
-id: phone number
-question: |
-  What is your phone number?
-subquestion: |
-  ${ collapse_template(why_contact_info_needed_template) }
-fields:  
-  - Phone number: users[0].phone_number
 ---
 id: How did you notify your landlord
 question: |
