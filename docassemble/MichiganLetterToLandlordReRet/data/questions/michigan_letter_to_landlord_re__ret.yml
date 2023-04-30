@@ -1,4 +1,3 @@
----
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALAnyState:any_state.yml
@@ -131,7 +130,7 @@ subquestion: |
   
   If you did **not** give your landlord your forwarding address within four days, the timelines in this letter do not apply and **you should not use this tool**. If that is the case, click [here](https://michiganlegalhelp.org/self-help-tools/housing/security-deposit-help-tenants) to return to the Michigan Legal Help web site to learn more.
   
-  Otherwise, please click the 'Next' button below.
+  Otherwise, click the 'Next' button below.
   
 ---
 comment: |
